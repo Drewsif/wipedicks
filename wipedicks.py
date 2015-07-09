@@ -13,7 +13,10 @@ def rand_dick():
     return dick
 
 def wipe(dev, rounds=1):
-    size = os.path.getsize(dev)
+    try:
+        size = os.path.getsize(dev)
+    except:
+        size = 0
     if size == 0:
         for i in range(0, rounds):
             try:
@@ -104,15 +107,18 @@ def parse_filelist(FileList, recursive=False):
 
 def _main():
     import argparse
-    parser = argparse.ArgumentParser(description="Wipe a file with dicks")
-    parser.add_argument("-r", "--recursive", action="store_true", help="Recursively parse folders for files to scan")
-    parser.add_argument('-n', '--numrounds', help="The number of times to write the file", required=False, metavar="num", default=1, type=int)
+    parser = argparse.ArgumentParser(description="Wipe files/devices with dicks")
+    parser.add_argument("-r", "--recursive", action="store_true", help="Recursively parse folders for files to wipe")
+    parser.add_argument('-n', '--numrounds', help="The number of rounds to write the files", required=False, metavar="num", default=1, type=int)
+    parser.add_argument("-w", "--wipefree", action="store_true", help="Wipe the free space by creating a large file")
     parser.add_argument('Files', help="Files, Directories, and Devices to wipe", nargs='+')
     args = parser.parse_args()
 
     file_list = parse_filelist(args.Files)
     thread_list = []
     kwargs = {'rounds': args.numrounds}
+    if args.wipefree:
+        file_list.append('dick.tmp')
     for f in file_list:
         t = threading.Thread(target=wipe, args=(f,), kwargs=kwargs)
         t.daemon = True
