@@ -1,6 +1,7 @@
 # wipedicks
-Wipe files and drives securely with randoms ASCII dicks.
+Wipe files and drives securely with randoms ASCII dicks. Because filling hard drives with zeros is really no fun
 
+```
 usage: wipedicks.py [-h] [-r] [-n num] Files [Files ...]
 
 Wipe a file with dicks
@@ -13,3 +14,4 @@ optional arguments:
   -r, --recursive       Recursively parse folders for files to scan
   -n num, --numrounds num
                         The number of times to write the file
+```
