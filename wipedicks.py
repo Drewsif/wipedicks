@@ -10,6 +10,8 @@ except:
 
 # This was generated using generate_dick_list()
 DICKS = ['8=D ', '8=D~ ', '8=D~~ ', '8=D~~~ ', '8==D ', '8==D~ ', '8==D~~ ', '8==D~~~ ', '8===D ', '8===D~ ', '8===D~~ ', '8===D~~~ ', '8====D ', '8====D~ ', '8====D~~ ', '8====D~~~ ', '8=====D ', '8=====D~ ', '8=====D~~ ', '8=====D~~~ ', '8======D ', '8======D~ ', '8======D~~ ', '8======D~~~ ', '8=======D ', '8=======D~ ', '8=======D~~ ', '8=======D~~~ ', '8========D ', '8========D~ ', '8========D~~ ', '8========D~~~ ', '8=========D ', '8=========D~ ', '8=========D~~ ', '8=========D~~~ ', '8==========D ', '8==========D~ ', '8==========D~~ ', '8==========D~~~ ', '8===========D ', '8===========D~ ', '8===========D~~ ', '8===========D~~~ ', '8============D ', '8============D~ ', '8============D~~ ', '8============D~~~ ', '8#=D ', '8#=D~ ', '8#=D~~ ', '8#=D~~~ ', '8#==D ', '8#==D~ ', '8#==D~~ ', '8#==D~~~ ', '8#===D ', '8#===D~ ', '8#===D~~ ', '8#===D~~~ ', '8#====D ', '8#====D~ ', '8#====D~~ ', '8#====D~~~ ', '8#=====D ', '8#=====D~ ', '8#=====D~~ ', '8#=====D~~~ ', '8#======D ', '8#======D~ ', '8#======D~~ ', '8#======D~~~ ', '8#=======D ', '8#=======D~ ', '8#=======D~~ ', '8#=======D~~~ ', '8#========D ', '8#========D~ ', '8#========D~~ ', '8#========D~~~ ', '8#=========D ', '8#=========D~ ', '8#=========D~~ ', '8#=========D~~~ ', '8#==========D ', '8#==========D~ ', '8#==========D~~ ', '8#==========D~~~ ', '8#===========D ', '8#===========D~ ', '8#===========D~~ ', '8#===========D~~~ ', '8#============D ', '8#============D~ ', '8#============D~~ ', '8#============D~~~ ']
+_fast_cache = ''
+_cache_count = 0
 
 
 def generate_dick_list():
@@ -27,8 +29,19 @@ def generate_dick_list():
 
 
 def rand_dick():
-    dick = random.choice(DICKS)
-    return dick
+    return random.choice(DICKS)
+
+
+def fast_rand_dick():
+    global _fast_cache
+    global _cache_count
+    if not _fast_cache or not _cache_count:
+        _fast_cache = ''
+        _cache_count = random.randint(1000, 10000)
+        for _ in range(0, random.randint(150, 300)):
+            _fast_cache += random.choice(DICKS)
+    _cache_count -= 1
+    return _fast_cache
 
 
 def wipe(dev, rounds=1):
@@ -36,6 +49,7 @@ def wipe(dev, rounds=1):
         size = os.path.getsize(dev)
     except:
         size = 0
+
     if size == 0:
         for i in range(0, rounds):
             try:
@@ -130,8 +144,13 @@ def _main():
     parser.add_argument("-r", "--recursive", action="store_true", help="Recursively parse folders for files to wipe")
     parser.add_argument('-n', '--numrounds', help="The number of rounds to write the files", required=False, metavar="num", default=1, type=int)
     parser.add_argument("-w", "--wipefree", action="store_true", help="Wipe the free space by creating a large file")
+    parser.add_argument("-s", "--slow", action="store_true", help="Use more randomness, tends to be slower")
     parser.add_argument('Files', help="Files, Directories, and Devices to wipe", nargs='+')
     args = parser.parse_args()
+
+    if not args.slow:
+        global rand_dick
+        rand_dick = fast_rand_dick
 
     file_list = parse_filelist(args.Files)
     thread_list = []
