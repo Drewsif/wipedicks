@@ -1,5 +1,5 @@
 # wipedicks
-Wipe files and drives securely with randoms ASCII dicks. Because filling hard drives with zeros is really no fun
+Wipe files and drives securely with randomized ASCII dicks. Because filling hard drives with zeros is really no fun
 
 ```
 usage: wipedicks.py [-h] [-r] [-n num] [-w] Files [Files ...]
