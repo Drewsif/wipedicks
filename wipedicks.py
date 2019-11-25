@@ -62,7 +62,6 @@ def wipe(dev, rounds=1):
                 try:
                     f.write(rand_dick())
                 except IOError:
-                    f.flush()
                     f.close()
                     break
     else:
@@ -80,7 +79,6 @@ def wipe(dev, rounds=1):
                 try:
                     f.write(dick)
                 except IOError:
-                    f.flush()
                     f.close()
                     break
 
@@ -98,6 +96,7 @@ def wipe(dev, rounds=1):
         os.remove(dev)
 
     return True
+
 
 def parse_dir(directory, recursive=False):
     """
@@ -118,6 +117,7 @@ def parse_dir(directory, recursive=False):
             filelist.append(item)
     return filelist
 
+
 def parse_filelist(FileList, recursive=False):
     """
     Takes a list of files and directories and returns a list of files.
@@ -137,6 +137,7 @@ def parse_filelist(FileList, recursive=False):
         else:
             pass
     return filelist
+
 
 def _main():
     import argparse
@@ -165,6 +166,7 @@ def _main():
 
     for t in thread_list:
         t.join()
+
 
 if __name__ == '__main__':
     _main()
